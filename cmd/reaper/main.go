@@ -67,6 +67,9 @@ func main() {
 
 	// handler
 	h := handlers.NewHandler(pool, db)
+	
+	// swarm handler for agent coordination
+	swarmHandler := handlers.NewSwarmHandler(db)
 
 	// status
 	app.Get("/status", h.Status)
@@ -139,6 +142,9 @@ func main() {
 	api.Post("/reports", h.CreateReport)
 	api.Delete("/reports/:id", h.DeleteReport)
 	// settings
+	
+	// swarm coordination endpoints
+	swarmHandler.RegisterSwarmRoutes(app)
 
 	// serve static frontend files
 	app.Use("/", filesystem.New(filesystem.Config{

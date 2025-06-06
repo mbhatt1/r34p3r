@@ -100,6 +100,26 @@ func main() {
 	api.Get("/attacks/:id", h.GetAttack)
 	api.Get("/attacks/:id/results", h.GetAttackResults)
 	api.Delete("/attack/:id/results", h.DeleteAttackResults)
+	
+	// web security testing
+	api.Post("/websec/scan", h.CreateWebSecurityScan)
+	api.Get("/websec/results/:id", h.GetWebSecurityResults)
+	api.Get("/websec/vulnerabilities", h.GetWebVulnerabilities)
+	
+	// binary analysis
+	api.Post("/binary/analyze", h.CreateBinaryAnalysis)
+	api.Get("/binary/results/:id", h.GetBinaryResults)
+	api.Post("/binary/upload", h.UploadBinary)
+	
+	// code security review
+	api.Post("/code/review", h.CreateCodeReview)
+	api.Get("/code/review/:id", h.GetCodeReviewResults)
+	
+	// advanced reconnaissance
+	api.Post("/recon/subdomains", h.ScanSubdomains)
+	api.Post("/recon/crawl", h.CrawlTarget)
+	api.Get("/recon/payloads", h.GetGeneratedPayloads)
+	
 	// fuzz
 	// automate
 	// collaborate

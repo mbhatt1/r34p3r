@@ -67,6 +67,9 @@ func main() {
 
 	// handler
 	h := handlers.NewHandler(pool, db)
+	
+	// swarm handler for agent coordination
+	swarmHandler := handlers.NewSwarmHandler(db)
 
 	// status
 	app.Get("/status", h.Status)
@@ -100,6 +103,26 @@ func main() {
 	api.Get("/attacks/:id", h.GetAttack)
 	api.Get("/attacks/:id/results", h.GetAttackResults)
 	api.Delete("/attack/:id/results", h.DeleteAttackResults)
+	
+	// web security testing
+	api.Post("/websec/scan", h.CreateWebSecurityScan)
+	api.Get("/websec/results/:id", h.GetWebSecurityResults)
+	api.Get("/websec/vulnerabilities", h.GetWebVulnerabilities)
+	
+	// binary analysis
+	api.Post("/binary/analyze", h.CreateBinaryAnalysis)
+	api.Get("/binary/results/:id", h.GetBinaryResults)
+	api.Post("/binary/upload", h.UploadBinary)
+	
+	// code security review
+	api.Post("/code/review", h.CreateCodeReview)
+	api.Get("/code/review/:id", h.GetCodeReviewResults)
+	
+	// advanced reconnaissance
+	api.Post("/recon/subdomains", h.ScanSubdomains)
+	api.Post("/recon/crawl", h.CrawlTarget)
+	api.Get("/recon/payloads", h.GetGeneratedPayloads)
+	
 	// fuzz
 	// automate
 	// collaborate
@@ -119,6 +142,9 @@ func main() {
 	api.Post("/reports", h.CreateReport)
 	api.Delete("/reports/:id", h.DeleteReport)
 	// settings
+	
+	// swarm coordination endpoints
+	swarmHandler.RegisterSwarmRoutes(app)
 
 	// serve static frontend files
 	app.Use("/", filesystem.New(filesystem.Config{
